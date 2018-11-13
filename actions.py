@@ -22,7 +22,10 @@ def pow(pow_num, pow_value):
 
 def root(root_num, root_value):
     try:
-        return root_num ** (1 / root_value)
+        if root_num > 0:
+            return root_num ** (1 / root_value)
+        else:
+            print("Простите, но корень из отрицательного числа не извлекается!")
     except ZeroDivisionError:
         print("\n   Нельзя вычислить корень 0 степени из числа!")
         #нужна ошибка корня из отрицателього числа
