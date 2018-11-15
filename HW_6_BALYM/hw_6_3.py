@@ -14,15 +14,19 @@ import inspect
 Решил я таки использовать собственное исключение, чтоб получше разобраться с классами,
 ну а еще так мне удобней будет оформить вывод данных в итоге проверки
 """
-class WrongType(Exception):
-    def __init__(self, type_dif, type):
-        self.type_dif = type_dif
-        self.type = type
+class TooManyTypes(Exception):
+    def __init__(self, type_set):
+        self.type_set = type_set
 
 def check_params_type(*args):
+    type_set = set()
     for gum in args:
-        if type(gum) != type(gum + 1):
-            raise WrongType(type(gum), type(gum + 1))
+        type_set.add(type(gum))
+    if len(type_set) > 1:
+        raise TooManyTypes(type_set)
+    else:
+        print("\nВсе аргументы успешно стали операторами функции!\n")
+    return type_set
 
 
 
@@ -32,12 +36,13 @@ def main(*args):
     """
     try:
         check_params_type(*args)
-    except WrongType as e:
-        print("\nАргументы не являются однотипными, обнаружено, что помимо {} присутствует {}, возможно и другие.".format(e.type_dif, e.type))
+    except TooManyTypes as e:
+        print("""\nДанные элементы, не подходят, так как они относятся к разным типам, список:
+\n{}.\n""".format(e.type_set))
     finally:
         for gum in args:
-            print("\nЭлемент '{}' относится к типу {}.".format(gum,type(gum)))
+            print("Элемент '{}' относится к типу {}.".format(gum,type(gum)))
 
 
 if __name__ == "__main__":
-    main(1,23,True,12.3,False,"Chad",23)
+    main(1,False,"True",23.56,(25,54),"Riddle")
