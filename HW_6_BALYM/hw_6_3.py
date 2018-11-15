@@ -11,7 +11,7 @@
 # Моё исполнение
 import inspect
 """
-Решил я таки использовать собственную ошибку, чтоб получше разобраться с классами,
+Решил я таки использовать собственное исключение, чтоб получше разобраться с классами,
 ну а еще так мне удобней будет оформить вывод данных в итоге проверки
 """
 class WrongType(Exception):
@@ -19,12 +19,6 @@ class WrongType(Exception):
         self.type_dif = type_dif
         self.type = type
 
-
-# kwargs = {
-# "a" : 10,
-# "b" : 20,
-# "c" : 12.2,
-# "d" : True}
 def check_params_type(*args):
     for gum in args:
         if type(gum) != type(gum + 1):
@@ -47,5 +41,3 @@ def main(*args):
 
 if __name__ == "__main__":
     main(1,23,True,12.3,False,"Chad",23)
-
-# здесь я использую finally:

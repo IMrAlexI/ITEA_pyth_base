@@ -29,6 +29,7 @@ def string_processing(text, *args, **kwargs):
     следующим блоком кода
     вызов_исключения WhitespaceError(ваща_переменна_позиции, ваша_переменная_символа)
     """
+# Сказано - сделано
     for sym in text:
         if sym in whitespace:
             raise WhitespaceError(text.find(sym) + 1, repr(sym))
