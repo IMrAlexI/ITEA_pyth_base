@@ -19,7 +19,7 @@ def string_processing(string):
 try:
     print(string_processing(text))
 except ValueError as e:
-    print("Проблема в том, что: ", text, e)
+    print("\nПроблема в том, что: ", text, e)
 
 """
 Так как в этом задании необходимо было лишь проверить наличие непечатных символов в тексте,

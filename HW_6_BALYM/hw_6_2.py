@@ -42,9 +42,9 @@ def main():
     """
     try:
         result = string_processing(text, whitespace)
-        print("Ваш текст для названия:", result)
+        print("\nВаш текст для названия:", result)
     except WhitespaceError as e:
-        print("Вы ввели исключённый символ, он находится под номером {}, а его репрезентация - {}".format(e.position, e.symbol))
+        print("\nОбнаружен исключённый символ, он находится под номером {}, а его репрезентация - {}".format(e.position, e.symbol))
 
 if __name__ == "__main__":
     main()

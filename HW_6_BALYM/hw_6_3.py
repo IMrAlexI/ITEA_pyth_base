@@ -33,10 +33,10 @@ def main(*args):
     try:
         check_params_type(*args)
     except WrongType as e:
-        print("Аргументы не являются однотипными, обнаружено, что помимо {} присутствует {}, возможно и другие.".format(e.type_dif, e.type))
+        print("\nАргументы не являются однотипными, обнаружено, что помимо {} присутствует {}, возможно и другие.".format(e.type_dif, e.type))
     finally:
         for gum in args:
-            print("Элемент '{}' относится к типу {}.".format(gum,type(gum)))
+            print("\nЭлемент '{}' относится к типу {}.".format(gum,type(gum)))
 
 
 if __name__ == "__main__":
