@@ -1,4 +1,4 @@
-import actions as act
+﻿import actions as act
 
 def input_std_math(filling):
 
@@ -13,6 +13,7 @@ def input_std_math(filling):
         try:
             first_num = float(input("   Введите число >>> "))
             oper = input("   Введите операцию >>> ")
+            oper = oper.replace(" ", "")
             second_num = float(input("   Введите число >>> "))
         except ValueError:
             print("\n   Вы ввели число некоректно, повторите ввод!")
@@ -31,6 +32,7 @@ def input_geom_math(filling):
     while filling:
         try:
             oper = input("   Введите операцию(sin, cos, tg, ctg) >>> ")
+            oper = oper.replace(" ", "")
             geom_num = float(input("   Введите обрабатываемое число >>> "))
         except ValueError:
             print("\n   Вы выполнили ввод некоректно, повторите ввод!")
