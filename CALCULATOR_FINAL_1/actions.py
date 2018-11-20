@@ -37,7 +37,13 @@ def geom_cos(geom_num):
     return m.cos(m.radians(geom_num))
 
 def geom_tg(geom_num):
-    return m.tan(m.radians(geom_num))
+    if geom_num == 90:
+        print("\n   Значение не определено")
+    else:
+        return m.tan(m.radians(geom_num))
 
 def geom_ctg(geom_num):
-    return m.atan(m.radians(geom_num))
+    if geom_num == 1:
+        print("\n   Значение не определено")
+    else:
+        return m.atan(m.radians(geom_num))
