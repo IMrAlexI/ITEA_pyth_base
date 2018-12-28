@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>URL shortener</title>
+      <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Lobster" />
+      <style>
+         body {
+         display: flex;
+         background: linear-gradient(0.25turn, #3f87a6, #ebf8e1, #f69d3c);
+         background-size: cover;
+         font-family: Lobster;
+         }
+         .cover {
+         width: 500px;
+         margin: 100px auto;
+         justify-content: space-between;
+         text-align: center;
+         }
+      </style>
+   </head>
+   <body>
+      <div class="cover">
+			<h1>Введите ссылку</h1>
+			<form action = '' class='flex-form' method="post">
+				 <p><input name="url"> <input type="submit"></p>
+			</form>
+			<!-- {{ form }}
+				 {{ form.values }} -->
+			{% if form %}
+			<div>
+				 <a href='http://127.0.0.1:8000/{{ form }}'>http://127.0.0.1:8000/{{ form }} </a>
+			 </div>
+			{% endif %}
+			{% if form_bad %}
+				<div>
+					 <p> Ссылка  <strong>{{ form_bad }} </strong> не прошла проверку. URL должен быть вида 'http://www.google.com' </p>
+				</div>
+				{% endif %}
+
+			{% if form_count %}
+			<p>Количество кликов: {{ form_count }}</p>
+			{% endif %}
+		</body>
+</html>
