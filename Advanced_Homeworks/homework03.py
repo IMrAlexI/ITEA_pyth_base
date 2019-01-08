@@ -62,7 +62,7 @@ def random_key(key = ""):
     последовательностей вы можете воспользоваться библиотекой random.
     """
     return key.join(choice(ascii_letters) for i in range(5))
-
+# map(обьект,(єлементы обрабатываемые им))   !!!
 
 def index(request):
     """
@@ -103,7 +103,7 @@ def index(request):
             cache.add(key, url)
             return render(request, 'index.html', {'form':key})
         except ValidationError:
-            return render(request, {'form_bad': url})
+            return render(request, 'index.html', {'form_message': url})
 
 
 def redirect_view(request, key):
