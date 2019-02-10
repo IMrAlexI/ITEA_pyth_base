@@ -4,9 +4,11 @@ from threading import Thread
 
 
 ##______________________________________________________________________________________________________________
-## TODO: Лог чата для восстановки истории,
- # /*готово проверку имени пользователя на не плагиат других готово*/
- # возможно личку!!!
+## TODO: Лог чата для восстановки истории -- работало, но не так как хотелось, а теперь крашит всю программу, ДОДЕЛАТЬ #памагити
+# "помощь" -- готово
+# изменение системных команд
+# /*готово проверку имени пользователя на не плагиат других готово*/
+# возможно личку!!!
 ##______________________________________________________________________________________________________________
 
 
@@ -31,39 +33,67 @@ def connections_accepter():
         addresses_dict[client] = client_address
         Thread(target = client_activity, args = (client,)).start()
 
-
+# обработка пользовательского ввода на сервере
 def client_activity(client):
-# Func that is processing client's requests(messages)
+# переменная с помощью пользователю в освоении
+    help = ['Для отправки сообщения помимо кнопки можно использовать "Ctrl(Command)+Enter".',
+            'Для получения истории(предидущих сообщений в чате) отправьте сообщение "/хроника".',
+            'Для выхода из приложения чата можно также отправить сообщение "/выход".',]
+# Получение имени пользователя с проверкой на уникальность и неиспользование технических конструкций чата
     client_name = client.recv(BUFFER_SIZE).decode('utf8')
-    if client_name in clients_dict.values():
-        client.send(bytes("Такое имя пользователя уже занято, попробуйте другой вариант.", 'utf8'))
+    if client_name in clients_dict.values() or client_name.startswith('/') or client_name.startswith('[Хроника]') :
+        client.send(bytes("Такое имя уже занято или недопустимо(1-й '/' или [Хроника]).", 'utf8'))
         client_activity(client)
+# стандартный сценарий работы с пользователем
     else:
         clients_dict[client] = client_name
-        WELCOME_MESSAGE = "Добро пожаловать в чат " + client_name + "! Введите '/выход' для выхода из чата."
+        WELCOME_MESSAGE = "Добро пожаловать в чат " + client_name + '! Введите "/помощь" для вывода справки.'
         client.send(bytes(WELCOME_MESSAGE, 'utf8'))
         message = bytes(client_name + " присоединился к нам!", 'utf8')
         messages_poster(message)
         while True:
             # print(clients_dict)
             message = client.recv(BUFFER_SIZE)
-            if message != bytes('/выход', 'utf8'):
+# Тут идёт проверка на команду выхода из чата и приложения чата пользователем с последующей обработкой
+            if message == bytes('/выход', 'utf8'):
                 # print(type(client_name))
                 # print(type(message))
                 # print(message)
-                messages_poster(message, client_name + ': ')
-            else:
                 message = bytes(client_name + " покинул нас(в плане чата XD)!", 'utf8')
                 client.close()
                 del clients_dict[client]
                 messages_poster(message)
                 break
+# Тут идёт проверка на команду запроса истории чата пользователем с последующей обработкой
+            elif message == bytes("/хроника", "utf8"):
+                log_to_user(client)
+# Тут идёт проверка на команду запроса справки/помощи пользователем с последующей обработкой
+            elif message == bytes("/помощь", "utf8"):
+                for tip in help:
+                    client.send(bytes(tip, 'utf8'))
+            else:
+                messages_poster(message, client_name + ': ')
+
+
+def log_to_user(client):
+    client.send(bytes('У сообщений из "хроники" перед именем пользователя будет надпись "Хроника>>>"', 'utf8'))
+    log_file = open("chat_log.txt", "r")
+    log_list = [line.split("\nnewline_marker") for line in log_file]
+    for line in log_list:
+        line = str(line[0])
+        print(type(line))
+        client.send(bytes('Хроника>>>' + line, 'utf8'))
+    del log_list
+    log_file.close()
 
 
 def messages_poster(message, nicknamer="system: "):
     try:
         for socket in clients_dict:
             socket.send(bytes(nicknamer, 'utf8') + message)
+            log_file = open("chat_log.txt", "a")
+            log_file.write(nicknamer + message.decode('utf8') + "\nnewline_marker")
+            log_file.close()
     except: pass
 
 if __name__ == "__main__":
@@ -72,4 +102,7 @@ if __name__ == "__main__":
     CLIENT_ACCEPTION_THREAD = Thread(target=connections_accepter)
     CLIENT_ACCEPTION_THREAD.start()
     CLIENT_ACCEPTION_THREAD.join()
+    LOG_TO_CLIENT_THREAD = Thread(target=client_activity)
+    LOG_TO_CLIENT_THREAD.start()
+    LOG_TO_CLIENT_THREAD.join()
     SERVER.close()

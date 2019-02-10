@@ -2,22 +2,13 @@ from threading import Thread
 from socket import AF_INET, SOCK_STREAM, socket
 from tkinter import *
 
-
-HOST = input('Введите значение хоста(просто пустое поле для значения по умолчанию): ')
-PORT = input('Введите знаяение порта(просто пустое поле для значения по умолчанию): ')
-
-if not HOST:
-    HOST = "192.168.111.1"
-if not PORT:
-    PORT = 2552
-else:
-    PORT = int(PORT)
-
-BUFFER_SIZE = 1024
-ADDRESS = (HOST, PORT)
-
-socket_for_client = socket(AF_INET, SOCK_STREAM)
-socket_for_client.connect(ADDRESS)
+# # TODO: СКРОЛЛЫ ПОД МЫШЬ*ПОФИКСИТЬ
+# Оптимизация роботы(некий уровень) -- готово
+# Розветвление функционала -- готово
+# Улучшение в плане запуска клиента -- готово: теперь ввод в консоли при старте клиента либо подключение к дефолтному из самого кода
+# Поток запускается корректно -- готово: раньше запускался один поток дважды, что влекло за собой ошибки при работе с аргументами из-за асинхронности
+# Более понятное начало работы с интерфейсом чата - готово
+# Добавил ползунок для горизонтальной плоскости, а то длинные сообщения ведь тоже бывают(возможны изменения на другое решение)
 
 
 def messages_reciever():
@@ -25,7 +16,8 @@ def messages_reciever():
         try:
             message = socket_for_client.recv(BUFFER_SIZE).decode('utf8')
             messages_list.insert(END, message)
-        except OSError('<--пользователь покинул чат('):
+        except:
+            GUI_closing_after_sender()
             break
 
 
@@ -57,13 +49,15 @@ MAIN_APP_FRAME.title('Факс - чат для избранных')
 SHOW_MESSAGES_FRAME = Frame(MAIN_APP_FRAME)
 # текстовая строка
 current_message = StringVar()
-current_message.set("Текст сообщения необходимо вводить в эту строку...")
+current_message.set("Ввод имени и сообщений(в последующем) производить в этой строке ...")
 # Ползунок
-SCROLLBAR = Scrollbar(SHOW_MESSAGES_FRAME)
+HOR_SCROLLBAR = Scrollbar(SHOW_MESSAGES_FRAME, orient = "horizontal")
+VER_SCROLLBAR = Scrollbar(SHOW_MESSAGES_FRAME, orient = "vertical")
 # Окно вывода
-messages_list = Listbox(SHOW_MESSAGES_FRAME,height = 30, width = 110, yscrollcommand = SCROLLBAR.set, bg = "black", fg = "violet")
+messages_list = Listbox(SHOW_MESSAGES_FRAME,height = 30, width = 110, xscrollcommand = HOR_SCROLLBAR.set, yscrollcommand = VER_SCROLLBAR.set, bg = "black", fg = "violet")
 # Привязка єлементов к позициям в блоке
-SCROLLBAR.pack(side = RIGHT, fill = Y)
+HOR_SCROLLBAR.pack(side = BOTTOM, fill = X)
+VER_SCROLLBAR.pack(side = RIGHT, fill = Y)
 messages_list.pack(side = LEFT, fill = BOTH)
 # Сборка блока
 SHOW_MESSAGES_FRAME.pack()
@@ -79,22 +73,26 @@ SEND_BUTTON.pack(side = 'right')
 # Закрытые интерфейса при закрытии приложения
 MAIN_APP_FRAME.protocol("WM_DELETE_WINDOW", GUI_closing)
 
-# Запуск потока интерфейса
-receiver_thread = Thread(target=messages_reciever)
-receiver_thread.start()
-mainloop()
 
-
-# способ ввода сетевых данных непосредственно из командной строки
+# +способ ввода сетевых данных непосредственно из командной строки
 if __name__ == '__main__':
     import sys
     BUFFER_SIZE = 1024
-    args = sys.argv[1:]
-    HOST, PORT, *_ = args
-    ADDRESS = (HOST, PORT)
-
-    socket_for_client = socket(AF_INET, SOCK_STREAM)
-    socket_for_client.connect(ADDRESS)
-    receiver_thread = Thread(target=messages_reciever)
-    receiver_thread.start()
-    mainloop()
+    try:
+        args = sys.argv[1:]
+        HOST = ""
+        PORT = ""
+        HOST, PORT, *_ = args
+    except:
+        if not HOST:
+            HOST = "192.168.111.1"
+        if not PORT:
+            PORT = "2552"
+    finally:
+        print(HOST, "_____", PORT)
+        ADDRESS = (HOST, int(PORT))
+        socket_for_client = socket(AF_INET, SOCK_STREAM)
+        socket_for_client.connect(ADDRESS)
+        receiver_thread = Thread(target=messages_reciever)
+        receiver_thread.start()
+        mainloop()
