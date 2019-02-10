@@ -3,6 +3,13 @@ from socket import AF_INET, socket, SOCK_STREAM
 from threading import Thread
 
 
+##______________________________________________________________________________________________________________
+## TODO: Лог чата для восстановки истории,
+ # /*готово проверку имени пользователя на не плагиат других готово*/
+ # возможно личку!!!
+##______________________________________________________________________________________________________________
+
+
 # Assigning main "objects"
 clients_dict = {}
 addresses_dict = {}
@@ -28,25 +35,29 @@ def connections_accepter():
 def client_activity(client):
 # Func that is processing client's requests(messages)
     client_name = client.recv(BUFFER_SIZE).decode('utf8')
-    clients_dict[client] = client_name
-    WELCOME_MESSAGE = "Добро пожаловать в чат " + client_name + "! Введите '/выход' для выхода из чата."
-    client.send(bytes(WELCOME_MESSAGE, 'utf8'))
-    message = bytes(client_name + " присоединился к нам!", 'utf8')
-    messages_poster(message)
-    while True:
-        print(clients_dict)
-        message = client.recv(BUFFER_SIZE)
-        if message != bytes('/выход', 'utf8'):
-            # print(type(client_name))
-            # print(type(message))
-            # print(message)
-            messages_poster(message, client_name + ': ')
-        else:
-            message = bytes(client_name + " покинул нас(в плане чата XD)!", 'utf8')
-            client.close()
-            del clients_dict[client]
-            messages_poster(message)
-            break
+    if client_name in clients_dict.values():
+        client.send(bytes("Такое имя пользователя уже занято, попробуйте другой вариант.", 'utf8'))
+        client_activity(client)
+    else:
+        clients_dict[client] = client_name
+        WELCOME_MESSAGE = "Добро пожаловать в чат " + client_name + "! Введите '/выход' для выхода из чата."
+        client.send(bytes(WELCOME_MESSAGE, 'utf8'))
+        message = bytes(client_name + " присоединился к нам!", 'utf8')
+        messages_poster(message)
+        while True:
+            # print(clients_dict)
+            message = client.recv(BUFFER_SIZE)
+            if message != bytes('/выход', 'utf8'):
+                # print(type(client_name))
+                # print(type(message))
+                # print(message)
+                messages_poster(message, client_name + ': ')
+            else:
+                message = bytes(client_name + " покинул нас(в плане чата XD)!", 'utf8')
+                client.close()
+                del clients_dict[client]
+                messages_poster(message)
+                break
 
 
 def messages_poster(message, nicknamer="system: "):

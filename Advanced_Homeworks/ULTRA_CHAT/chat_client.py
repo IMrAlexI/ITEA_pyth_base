@@ -3,9 +3,11 @@ from socket import AF_INET, SOCK_STREAM, socket
 from tkinter import *
 
 
-HOST = input('Введите значение хоста: ')
-PORT = input('Введите знаяение порта: ')
+HOST = input('Введите значение хоста(просто пустое поле для значения по умолчанию): ')
+PORT = input('Введите знаяение порта(просто пустое поле для значения по умолчанию): ')
 
+if not HOST:
+    HOST = "192.168.111.1"
 if not PORT:
     PORT = 2552
 else:
@@ -31,13 +33,18 @@ def messages_sender(event = None):
     message = current_message.get()
     current_message.set('')
     socket_for_client.send(bytes(message, 'utf8'))
-    if current_message == '/выход':
+    if message == '/выход':
         socket_for_client.close()
+        GUI_closing_after_sender()
 
 
 def GUI_closing(event = None):
     current_message.set("/выход")
     messages_sender()
+    GUI_closing_after_sender()
+
+
+def GUI_closing_after_sender():
     MAIN_APP_FRAME.destroy()
     from sys import exit
     exit(0)
