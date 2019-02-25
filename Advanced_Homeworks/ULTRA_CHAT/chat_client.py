@@ -2,7 +2,7 @@ from threading import Thread
 from socket import AF_INET, SOCK_STREAM, socket
 from tkinter import *
 
-# # TODO: СКРОЛЛЫ ПОД МЫШЬ*ПОФИКСИТЬ
+# TODO: СКРОЛЛЫ ПОД МЫШЬ*ПОФИКСИТЬ(проблем со скролом у людей оказадось очень много, они интерактивны, однако не хотят перемещать ничего, хотя при использовании перемещения по тексту стрелками скролл меняет положение)
 # Оптимизация роботы(некий уровень) -- готово
 # Розветвление функционала -- готово
 # Улучшение в плане запуска клиента -- готово: теперь ввод в консоли при старте клиента либо подключение к дефолтному из самого кода
@@ -54,7 +54,8 @@ current_message.set("Ввод имени и сообщений(в последу
 HOR_SCROLLBAR = Scrollbar(SHOW_MESSAGES_FRAME, orient = "horizontal")
 VER_SCROLLBAR = Scrollbar(SHOW_MESSAGES_FRAME, orient = "vertical")
 # Окно вывода
-messages_list = Listbox(SHOW_MESSAGES_FRAME,height = 30, width = 110, xscrollcommand = HOR_SCROLLBAR.set, yscrollcommand = VER_SCROLLBAR.set, bg = "black", fg = "violet")
+messages_list = Listbox(SHOW_MESSAGES_FRAME,height = 30, width = 110, xscrollcommand = HOR_SCROLLBAR.set,\
+    yscrollcommand = VER_SCROLLBAR.set, bg = "black", fg = "violet")
 # Привязка єлементов к позициям в блоке
 HOR_SCROLLBAR.pack(side = BOTTOM, fill = X)
 VER_SCROLLBAR.pack(side = RIGHT, fill = Y)
@@ -63,7 +64,7 @@ messages_list.pack(side = LEFT, fill = BOTH)
 SHOW_MESSAGES_FRAME.pack()
 
 # Сторока ввода: действия
-TEXT_INPUT_FIELD = Entry(MAIN_APP_FRAME, textvariable = current_message, width = 102, bg = "black", fg = "violet")
+TEXT_INPUT_FIELD = Entry(MAIN_APP_FRAME, textvariable = current_message, width = 102, bg = "black", fg = "violet", insertbackground = "yellow")
 TEXT_INPUT_FIELD.bind('<Control-Return>', messages_sender)
 TEXT_INPUT_FIELD.pack(side = 'left', fill = Y)
 # Кнопка отправки

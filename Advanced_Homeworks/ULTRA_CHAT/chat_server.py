@@ -4,11 +4,11 @@ from threading import Thread
 
 
 ##______________________________________________________________________________________________________________
-## TODO: Лог чата для восстановки истории -- работало, но не так как хотелось, а теперь крашит всю программу, ДОДЕЛАТЬ #памагити
+## TODO: Лог чата для восстановки истории -- работало, но не так как хотелось, а теперь крашит всю программу, я не могу разобраться, не понимаю
 # "помощь" -- готово
 # изменение системных команд
 # /*готово проверку имени пользователя на не плагиат других готово*/
-# возможно личку!!!
+# возможно личку(уже возможно, просто использовать какой-то другой порт, колхоз, но работает ведь)
 ##______________________________________________________________________________________________________________
 
 
@@ -37,8 +37,8 @@ def connections_accepter():
 def client_activity(client):
 # переменная с помощью пользователю в освоении
     help = ['Для отправки сообщения помимо кнопки можно использовать "Ctrl(Command)+Enter".',
-            'Для получения истории(предидущих сообщений в чате) отправьте сообщение "/хроника".',
-            'Для выхода из приложения чата можно также отправить сообщение "/выход".',]
+            # 'Для получения истории(предидущих сообщений в чате) отправьте сообщение "/хроника".',
+            'Для выхода из приложения чата можно также отправить сообщение "/выход".']
 # Получение имени пользователя с проверкой на уникальность и неиспользование технических конструкций чата
     client_name = client.recv(BUFFER_SIZE).decode('utf8')
     if client_name in clients_dict.values() or client_name.startswith('/') or client_name.startswith('[Хроника]') :
@@ -65,26 +65,26 @@ def client_activity(client):
                 messages_poster(message)
                 break
 # Тут идёт проверка на команду запроса истории чата пользователем с последующей обработкой
-            elif message == bytes("/хроника", "utf8"):
-                log_to_user(client)
+            # elif message == bytes("/хроника", "utf8"):
+            #     log_to_user(client)
 # Тут идёт проверка на команду запроса справки/помощи пользователем с последующей обработкой
             elif message == bytes("/помощь", "utf8"):
                 for tip in help:
-                    client.send(bytes(tip, 'utf8'))
+                    client.send(bytes(tip + "\n", 'utf8'))
             else:
                 messages_poster(message, client_name + ': ')
 
-
-def log_to_user(client):
-    client.send(bytes('У сообщений из "хроники" перед именем пользователя будет надпись "Хроника>>>"', 'utf8'))
-    log_file = open("chat_log.txt", "r")
-    log_list = [line.split("\nnewline_marker") for line in log_file]
-    for line in log_list:
-        line = str(line[0])
-        print(type(line))
-        client.send(bytes('Хроника>>>' + line, 'utf8'))
-    del log_list
-    log_file.close()
+#пока выключу это
+# def log_to_user(client):
+#     client.send(bytes('У сообщений из "хроники" перед именем пользователя будет надпись "Хроника>>>"', 'utf8'))
+#     log_file = open("chat_log.txt", "r")
+#     log_list = [line.split("\nnewline_marker") for line in log_file]
+#     for line in log_list:
+#         send_line = str(line)
+#         print(type(line))
+#         client.send(bytes('Хроника>>>' + send_line, 'utf8'))
+#     del log_list
+#     log_file.close()
 
 
 def messages_poster(message, nicknamer="system: "):

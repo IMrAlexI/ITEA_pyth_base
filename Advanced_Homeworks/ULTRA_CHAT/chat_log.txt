@@ -76,4 +76,25 @@ newline_markerАлександр: аа
 newline_markerАлександр: а
 newline_markerАлександр: скроллы работают стрелочками( я без мыши просто, не проверить)
 newline_markerАлександр: только нужно навестись на текст(нажать)
+newline_markersystem: Александр присоединился к нам!
+newline_markerАлександр: Привет!!!!
+newline_markersystem: Ярослав присоединился к нам!
+newline_markersystem: Ярослав присоединился к нам!
+newline_markerЯрослав: Дарова
+newline_markerЯрослав: Дарова
+newline_markerАлександр: Как дела?
+newline_markerАлександр: Как дела?
+newline_markerАлександр: Как она, жизнь молодая?
+newline_markerАлександр: Как она, жизнь молодая?
+newline_markersystem: Джонатан присоединился к нам!
+newline_markerДжонатан: лшовшщрмщшоіщшаршгршщофіщвосмодищш щождрфішщвосєдлтжугрШВр гшр1 ошісшгчрх09 ш-г3шщуцх ї щшращшуц зіагі Р ГРщ
+newline_markersystem: джонатан присоединился к нам!
+newline_markerджонатан: как дела?
+newline_markersystem: Дракар присоединился к нам!
+newline_markersystem: Лорем присоединился к нам!
+newline_markersystem: Витян присоединился к нам!
+newline_markerВитян: здарова
+newline_markerВитян: сервер работает ещ'
+newline_markersystem: Tous  присоединился к нам!
+newline_markerTous : /виход
 newline_marker
